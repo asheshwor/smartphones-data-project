@@ -10,6 +10,8 @@
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #*     Obtaining data
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+# data link:
+# https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 ## The script assumes that the data has already been downloaded in the 
 #   working directory and extracted in the data subfolder
 #   ./data/{extract here}
@@ -23,14 +25,13 @@
 #   README.txt --------------------a text file
 #
 # The script outputs two files in the same directory so two new files 
-#   will be seen after running the script
+#   will be added after running the script
 #
 # **** Warning ****
 # Due to the large size of the dataset, the script takes a few minutes to
-# run. Please be patient. A buffersize of 500 is used to read the large
-# data sets. Please change it to a smaller value if less RAM is
-# available.
-
+# run (>5 minutes). Please be patient.
+# A buffersize of 500 is used to read the large data sets.
+# Please change it to a smaller value if less RAM is available.
 
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #*     Load packages
@@ -78,7 +79,7 @@ feat$V4 <- gsub("__", "_", feat$V4) #replace double underscore with single under
 feat$V4 <- gsub("_$", "", feat$V4) #remove _ from end of string
 feat <- feat[,c(4)] #make a vector
 ## read acceleration data
-widths <- rep(c(-1, 15),561)
+widths <- rep(c(-1, 15),561) #561 columns in the text file
 ## use smaller buffer size if less than 8GB of RAM is available
 buffer <- 500 #used ~5.6GB ram
 test.x <- read.fwf("./data/UCI HAR Dataset/test/X_test.txt", widths, header = F, n=-1,
@@ -112,7 +113,9 @@ write.csv(accdata.sub, file = "./data/UCI HAR Dataset/subset.csv",
 #*     Label dataset with descriptive activity names
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #Task 3: Uses descriptive activity names to name the activities in the data set
-#alredy done in above code
+#   alredy done in above code [Task 1] while transfering names of variables
+#   from features.
+
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #*     Label dataset with descriptive activity names
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
