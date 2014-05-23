@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>CodeBook - Getting and Cleaning Data - Smartphones data preparation</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<h1>CodeBook - Getting and Cleaning Data - Smartphones data preparation</h1>
+
+<h2>Introduction</h2>
+
+<p>This codebook is for the tidy data output created for Getting and Cleaning Data Coursera course project. The description of the code and data source is available in the <code>README.md</code> file.</p>
+
+<h2>Raw Data</h2>
+
+<p>The raw data used for this exercies was downloaded from <a href="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip">https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip</a></p>
+
+<p>The explaination of the data project through the data was collected is available at UCI Machine Learning Repository website [1] along with the links to the original datasets</p>
+
+<p>##Description</p>
+
+<p>##Tidy dataset</p>
+
+<p>The original variables were selected from the raw data based on the variable names as listed in <code>features.txt</code> file. The variable names contain commas, hyphens, and parenthes which is removed by a series of <code>chartr</code> and <code>gsub</code> functions. The accelaration data has 561 columns. In order to extract the columns containing the mean and standard deviations, the words <code>mean</code>, <code>Mean</code>, and <code>std</code> are matched to the column names (variable names) to see if they contain data on mean and standard deviations. For this exercise, <strong>all the columns matching the words are assumed to have information on either the mean or standard deviation</strong>. The <code>tidy.txt</code> dataset is a text file and containd the variables as listed in the table below.</p>
+
+<table><thead>
+<tr>
+<th>SN</th>
+<th>Variable name</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>Activity</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Subject</td>
+</tr>
+<tr>
+<td>3</td>
+<td>tBodyAcc_mean_X</td>
+</tr>
+<tr>
+<td>4</td>
+<td>tBodyAcc_mean_Y</td>
+</tr>
+<tr>
+<td>5</td>
+<td>tBodyAcc_mean_Z</td>
+</tr>
+<tr>
+<td>6</td>
+<td>tGravityAcc_mean_X</td>
+</tr>
+<tr>
+<td>7</td>
+<td>tGravityAcc_mean_Y</td>
+</tr>
+<tr>
+<td>8</td>
+<td>tGravityAcc_mean_Z</td>
+</tr>
+<tr>
+<td>9</td>
+<td>tBodyAccJerk_mean_X</td>
+</tr>
+<tr>
+<td>10</td>
+<td>tBodyAccJerk_mean_Y</td>
+</tr>
+<tr>
+<td>11</td>
+<td>tBodyAccJerk_mean_Z</td>
+</tr>
+<tr>
+<td>12</td>
+<td>tBodyGyro_mean_X</td>
+</tr>
+<tr>
+<td>13</td>
+<td>tBodyGyro_mean_Y</td>
+</tr>
+<tr>
+<td>14</td>
+<td>tBodyGyro_mean_Z</td>
+</tr>
+<tr>
+<td>15</td>
+<td>tBodyGyroJerk_mean_X</td>
+</tr>
+<tr>
+<td>16</td>
+<td>tBodyGyroJerk_mean_Y</td>
+</tr>
+<tr>
+<td>17</td>
+<td>tBodyGyroJerk_mean_Z</td>
+</tr>
+<tr>
+<td>18</td>
+<td>tBodyAccMag_mean</td>
+</tr>
+<tr>
+<td>19</td>
+<td>tGravityAccMag_mean</td>
+</tr>
+<tr>
+<td>20</td>
+<td>tBodyAccJerkMag_mean</td>
+</tr>
+<tr>
+<td>21</td>
+<td>tBodyGyroMag_mean</td>
+</tr>
+<tr>
+<td>22</td>
+<td>tBodyGyroJerkMag_mean</td>
+</tr>
+<tr>
+<td>23</td>
+<td>fBodyAcc_mean_X</td>
+</tr>
+<tr>
+<td>24</td>
+<td>fBodyAcc_mean_Y</td>
+</tr>
+<tr>
+<td>25</td>
+<td>fBodyAcc_mean_Z</td>
+</tr>
+<tr>
+<td>26</td>
+<td>fBodyAcc_meanFreq_X</td>
+</tr>
+<tr>
+<td>27</td>
+<td>fBodyAcc_meanFreq_Y</td>
+</tr>
+<tr>
+<td>28</td>
+<td>fBodyAcc_meanFreq_Z</td>
+</tr>
+<tr>
+<td>29</td>
+<td>fBodyAccJerk_mean_X</td>
+</tr>
+<tr>
+<td>30</td>
+<td>fBodyAccJerk_mean_Y</td>
+</tr>
+<tr>
+<td>31</td>
+<td>fBodyAccJerk_mean_Z</td>
+</tr>
+<tr>
+<td>32</td>
+<td>fBodyAccJerk_meanFreq_X</td>
+</tr>
+<tr>
+<td>33</td>
+<td>fBodyAccJerk_meanFreq_Y</td>
+</tr>
+<tr>
+<td>34</td>
+<td>fBodyAccJerk_meanFreq_Z</td>
+</tr>
+<tr>
+<td>35</td>
+<td>fBodyGyro_mean_X</td>
+</tr>
+<tr>
+<td>36</td>
+<td>fBodyGyro_mean_Y</td>
+</tr>
+<tr>
+<td>37</td>
+<td>fBodyGyro_mean_Z</td>
+</tr>
+<tr>
+<td>38</td>
+<td>fBodyGyro_meanFreq_X</td>
+</tr>
+<tr>
+<td>39</td>
+<td>fBodyGyro_meanFreq_Y</td>
+</tr>
+<tr>
+<td>40</td>
+<td>fBodyGyro_meanFreq_Z</td>
+</tr>
+<tr>
+<td>41</td>
+<td>fBodyAccMag_mean</td>
+</tr>
+<tr>
+<td>42</td>
+<td>fBodyAccMag_meanFreq</td>
+</tr>
+<tr>
+<td>43</td>
+<td>fBodyBodyAccJerkMag_mean</td>
+</tr>
+<tr>
+<td>44</td>
+<td>fBodyBodyAccJerkMag_meanFreq</td>
+</tr>
+<tr>
+<td>45</td>
+<td>fBodyBodyGyroMag_mean</td>
+</tr>
+<tr>
+<td>46</td>
+<td>fBodyBodyGyroMag_meanFreq</td>
+</tr>
+<tr>
+<td>47</td>
+<td>fBodyBodyGyroJerkMag_mean</td>
+</tr>
+<tr>
+<td>48</td>
+<td>fBodyBodyGyroJerkMag_meanFreq</td>
+</tr>
+<tr>
+<td>49</td>
+<td>angle_tBodyAccMean_gravity</td>
+</tr>
+<tr>
+<td>50</td>
+<td>angle_tBodyAccJerkMean_gravityMean</td>
+</tr>
+<tr>
+<td>51</td>
+<td>angle_tBodyGyroMean_gravityMean</td>
+</tr>
+<tr>
+<td>52</td>
+<td>angle_tBodyGyroJerkMean_gravityMean</td>
+</tr>
+<tr>
+<td>53</td>
+<td>angle_X_gravityMean</td>
+</tr>
+<tr>
+<td>54</td>
+<td>angle_Y_gravityMean</td>
+</tr>
+<tr>
+<td>55</td>
+<td>angle_Z_gravityMean</td>
+</tr>
+<tr>
+<td>56</td>
+<td>tBodyAcc_std_X</td>
+</tr>
+<tr>
+<td>57</td>
+<td>tBodyAcc_std_Y</td>
+</tr>
+<tr>
+<td>58</td>
+<td>tBodyAcc_std_Z</td>
+</tr>
+<tr>
+<td>59</td>
+<td>tGravityAcc_std_X</td>
+</tr>
+<tr>
+<td>60</td>
+<td>tGravityAcc_std_Y</td>
+</tr>
+<tr>
+<td>61</td>
+<td>tGravityAcc_std_Z</td>
+</tr>
+<tr>
+<td>62</td>
+<td>tBodyAccJerk_std_X</td>
+</tr>
+<tr>
+<td>63</td>
+<td>tBodyAccJerk_std_Y</td>
+</tr>
+<tr>
+<td>64</td>
+<td>tBodyAccJerk_std_Z</td>
+</tr>
+<tr>
+<td>65</td>
+<td>tBodyGyro_std_X</td>
+</tr>
+<tr>
+<td>66</td>
+<td>tBodyGyro_std_Y</td>
+</tr>
+<tr>
+<td>67</td>
+<td>tBodyGyro_std_Z</td>
+</tr>
+<tr>
+<td>68</td>
+<td>tBodyGyroJerk_std_X</td>
+</tr>
+<tr>
+<td>69</td>
+<td>tBodyGyroJerk_std_Y</td>
+</tr>
+<tr>
+<td>70</td>
+<td>tBodyGyroJerk_std_Z</td>
+</tr>
+<tr>
+<td>71</td>
+<td>tBodyAccMag_std</td>
+</tr>
+<tr>
+<td>72</td>
+<td>tGravityAccMag_std</td>
+</tr>
+<tr>
+<td>73</td>
+<td>tBodyAccJerkMag_std</td>
+</tr>
+<tr>
+<td>74</td>
+<td>tBodyGyroMag_std</td>
+</tr>
+<tr>
+<td>75</td>
+<td>tBodyGyroJerkMag_std</td>
+</tr>
+<tr>
+<td>76</td>
+<td>fBodyAcc_std_X</td>
+</tr>
+<tr>
+<td>77</td>
+<td>fBodyAcc_std_Y</td>
+</tr>
+<tr>
+<td>78</td>
+<td>fBodyAcc_std_Z</td>
+</tr>
+<tr>
+<td>79</td>
+<td>fBodyAccJerk_std_X</td>
+</tr>
+<tr>
+<td>80</td>
+<td>fBodyAccJerk_std_Y</td>
+</tr>
+<tr>
+<td>81</td>
+<td>fBodyAccJerk_std_Z</td>
+</tr>
+<tr>
+<td>82</td>
+<td>fBodyGyro_std_X</td>
+</tr>
+<tr>
+<td>83</td>
+<td>fBodyGyro_std_Y</td>
+</tr>
+<tr>
+<td>84</td>
+<td>fBodyGyro_std_Z</td>
+</tr>
+<tr>
+<td>85</td>
+<td>fBodyAccMag_std</td>
+</tr>
+<tr>
+<td>86</td>
+<td>fBodyBodyAccJerkMag_std</td>
+</tr>
+<tr>
+<td>87</td>
+<td>fBodyBodyGyroMag_std</td>
+</tr>
+<tr>
+<td>88</td>
+<td>fBodyBodyGyroJerkMag_std</td>
+</tr>
+</tbody></table>
+
+<p>##Units</p>
+
+<p>The Activity column has the follwing six character labels <code>WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, and LAYING</code>. The subject identifiers are numeric variables ranging from <code>1</code> to <code>30</code> representing the 30 volunteers who contributed for the experiment. The variables from column 3 to 88 are numeric variables (double precision). <strong>As all the variables in the tidy dataset from <code>1</code> to <code>30</code> contains either the mean or the standard deviation, the original units from the raw dataset are preserved.</strong></p>
+
+</body>
+
+</html>
+

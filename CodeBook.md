@@ -1,8 +1,16 @@
-CodeBook
+CodeBook - Getting and Cleaning Data - Smartphones data preparation
 =========
 
-##Tidy dataset variables
+## Introduction
 
+This codebook is for the tidy data output created for Getting and Cleaning Data Coursera course project. The description of the code and data source is available in the ```README.md``` file.
+
+## Raw Data
+The raw data used for this exercies was downloaded from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
+
+##Tidy dataset
+
+The original variables were selected from the raw data based on the variable names as listed in ```features.txt``` file. The variable names contain commas, hyphens, and parenthes which is removed by a series of ```chartr``` and ```gsub``` functions. The accelaration data has 561 columns. In order to extract the columns containing the mean and standard deviations, the words ```mean```, ```Mean```, and ```std``` are matched to the column names (variable names) to see if they contain data on mean and standard deviations. For this exercise, **all the columns matching the words are assumed to have information on either the mean or standard deviation**. The ```tidy.txt``` dataset is a text file and containd the variables as listed in the table below.
 
 | SN |            Variable name            |
 |----|-------------------------------------|
@@ -94,4 +102,7 @@ CodeBook
 | 86 | fBodyBodyAccJerkMag_std             |
 | 87 | fBodyBodyGyroMag_std                |
 | 88 | fBodyBodyGyroJerkMag_std            |
-|----|-------------------------------------|
+
+##Units
+
+The Activity column has the follwing six character labels ```WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, and LAYING```. The subject identifiers are numeric variables ranging from ```1``` to ```30``` representing the 30 volunteers who contributed for the experiment. The variables from column 3 to 88 are numeric variables (double precision). **As all the variables in the tidy dataset from ```1``` to ```30``` contains either the mean or the standard deviation, the original units from the raw dataset are preserved.**

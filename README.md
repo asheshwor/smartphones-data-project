@@ -7,7 +7,7 @@ This project is an exercise for Getting and Cleaning Data Coursera course projec
 
 ## Data source
 The data used for this exercies was downloaded from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
-The explaination of the data project through the data was collected is available at UCI Machine Learning Repository website [1] along with the links to the original datasets
+The explaination of the data project through which the data was collected is available at UCI Machine Learning Repository website [1] along with the links to the original datasets
 
 ## Data
 The script assumes that the data has already been downloaded in the working directory and extracted in the data subfolder. The basic folder structure should look like this:
