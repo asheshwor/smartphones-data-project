@@ -1,45 +1,85 @@
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+#*     Notes
+#* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+##Date: 2014-05-23
+##Submission for coursera Getting and cleaning data course - May 5 - June 2
+##  2014
+## See README.md for further explaination
+# github url: https://github.com/asheshwor/smartphones-data-project
+
+#* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+#*     Obtaining data
+#* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+## The script assumes that the data has already been downloaded in the 
+#   working directory and extracted in the data subfolder
+#   ./data/{extract here}
+#   The basic folder structure should look like this
+#   ./data/UCI HAR Dataset --------main folder with the following items
+#   test --------------------------a folder
+#   train -------------------------a folder
+#   activity_labels.txt -----------a text file
+#   features.txt ------------------a text file
+#   features_info.txt -------------a text file
+#   README.txt --------------------a text file
+#
+# The script outputs two files in the same directory so two new files 
+#   will be seen after running the script
+#
+# **** Warning ****
+# Due to the large size of the dataset, the script takes a few minutes to
+# run. Please be patient. A buffersize of 500 is used to read the large
+# data sets. Please change it to a smaller value if less RAM is
+# available.
+
+
+#* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #*     Load packages
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 library(plyr)
+
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #*     Read and merge data
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #Task 1: Merges the training and the test sets to create one data set.
-#clear memory
-#rm(list = ls())
+#clear memory if needed.
+#rm(list = ls()) #commented to prevent accidential clearing of workspace vars
 ##activity - 1-6
-test.y <- read.fwf("./data/UCI HAR Dataset/test/y_test.txt", c(1), header = F, n=-1)
-train.y <- read.fwf("./data/UCI HAR Dataset/train/y_train.txt", c(1), header = F, n=-1)
+test.y <- read.fwf("./data/UCI HAR Dataset/test/y_test.txt", c(1),
+                   header = F, n=-1) #read test activities list
+train.y <- read.fwf("./data/UCI HAR Dataset/train/y_train.txt", c(1),
+                    header = F, n=-1) #read training activities list
 activity <- rbind(test.y, train.y)
 #nrow(test.y) #2947
 #nrow(train.y) #7352
 #nrow(train.all) #10299
 
-##subject - volunteer numbers
-test.s <- read.table("./data/UCI HAR Dataset/test/subject_test.txt", header=F)
-train.s <- read.table("./data/UCI HAR Dataset/train/subject_train.txt", header=F) 
-subject <- rbind(test.s, train.s)
+##  subject - volunteer numbers
+test.s <- read.table("./data/UCI HAR Dataset/test/subject_test.txt",
+                     header=F) #read test subjects
+train.s <- read.table("./data/UCI HAR Dataset/train/subject_train.txt",
+                      header=F) ##read training subjects
+subject <- rbind(test.s, train.s) #combine subjects
+#create identifier for training/subject
 dat <- c(rep(1,nrow(test.s)), rep(2,nrow(train.s))) #1 for test; 2 for training
 #combine training, subject and activity
 comb <- cbind(dat, subject, activity)
 names(comb) <- c("Data", "Subject", "Activity")
+#remove temporary variables from memory
 rm(list = c("test.y", "train.y", "activity", "test.s", "train.s", "subject", "dat"))
 
-#head(dat2[,c(555:561)],10)
-#head(dat2[,c(1:5)],10)
-#dat2$V1[1] * 1000000000
 ##getting variable names from features
 #read subject
 feat <- read.table("./data/UCI HAR Dataset/features.txt", sep=" ", header=F)
+#clean variable names as they contain the following characters:
+# comma, hyphen, parentheses
 feat$V3 <- chartr("-,)(", "____", feat$V2) #replace hyphen, comma and parenthes with underscore
 feat$V4 <- gsub("__", "_", feat$V3) #replace double underscore with single underscore
 feat$V4 <- gsub("__", "_", feat$V4) #replace double underscore with single underscore
 feat$V4 <- gsub("_$", "", feat$V4) #remove _ from end of string
-#tail(feat[,c(2,4)])
 feat <- feat[,c(4)] #make a vector
 ## read acceleration data
 widths <- rep(c(-1, 15),561)
+## use smaller buffer size if less than 8GB of RAM is available
 buffer <- 500 #used ~5.6GB ram
 test.x <- read.fwf("./data/UCI HAR Dataset/test/X_test.txt", widths, header = F, n=-1,
                    buffersize = buffer)
@@ -49,10 +89,9 @@ train.x <- read.fwf("./data/UCI HAR Dataset/train/X_train.txt", widths, header =
 accdata <- rbind(test.x, train.x)
 rm(list=c("test.x", "train.x", "widths")) #remove
 names(accdata) <- feat #transfer names from features
-#head(accdata[,c(1:10)])
 ##merge with activity and subject data
 accdata <- cbind(comb, accdata) #combined data
-rm(list = c("comb", "feat")) #remove
+rm(list = c("comb", "feat")) #remove variables from memory
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #*     Extract mean and standard deviations only
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -64,7 +103,7 @@ sel1 <- grep("mean", vars) #lower case mean
 sel2 <- grep("Mean", vars) #mean with capital first letter
 sel3 <- grep("std", vars) #std
 sel <- unique(c(sel1,sel2,sel3))
-#rm(list=c("sel1", "sel2", "sel3"))
+rm(list=c("sel1", "sel2", "sel3")) #remove variables from memory
 accdata.sub <- accdata[,c(1:3, sel)] #subset
 ##write the file
 write.csv(accdata.sub, file = "./data/UCI HAR Dataset/subset.csv",
@@ -73,7 +112,7 @@ write.csv(accdata.sub, file = "./data/UCI HAR Dataset/subset.csv",
 #*     Label dataset with descriptive activity names
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #Task 3: Uses descriptive activity names to name the activities in the data set
-#alredy done
+#alredy done in above code
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #*     Label dataset with descriptive activity names
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -96,10 +135,12 @@ tidy <- ddply(accdata.sub[,c(-1)], c("Activity", "Subject"),
                 xmeans <- colMeans(xdf[,c(-1,-2)])
                 return(xmeans)
               })
-#tail(tidy)
-#write tidy dataset to file
-write.csv(tidy, file = "./data/UCI HAR Dataset/tidy.csv",
+#write tidy dataset to a csv file with .txt extention
+write.csv(tidy, file = "./data/UCI HAR Dataset/tidy.txt",
           row.names=FALSE)
+
+##### fin *****
+
 #rm(list = ls())
 #exporting variable names to a file
 varlist <- data.frame(names(tidy))
