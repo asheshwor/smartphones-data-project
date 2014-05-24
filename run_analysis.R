@@ -4,7 +4,7 @@
 ##Date: 2014-05-23
 ##Submission for coursera Getting and cleaning data course - May 5 - June 2
 ##  2014
-## See README.md for further explaination
+## See README.md for further explanation
 # github url: https://github.com/asheshwor/smartphones-data-project
 
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,7 +43,7 @@ library(plyr)
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #Task 1: Merges the training and the test sets to create one data set.
 #clear memory if needed.
-#rm(list = ls()) #commented to prevent accidential clearing of workspace vars
+#rm(list = ls()) #commented to prevent accidental clearing of workspace vars
 ##activity - 1-6
 test.y <- read.fwf("./data/UCI HAR Dataset/test/y_test.txt", c(1),
                    header = F, n=-1) #read test activities list
@@ -73,7 +73,7 @@ rm(list = c("test.y", "train.y", "activity", "test.s", "train.s", "subject", "da
 feat <- read.table("./data/UCI HAR Dataset/features.txt", sep=" ", header=F)
 #clean variable names as they contain the following characters:
 # comma, hyphen, parentheses
-feat$V3 <- chartr("-,)(", "____", feat$V2) #replace hyphen, comma and parenthes with underscore
+feat$V3 <- chartr("-,)(", "____", feat$V2) #replace hyphen, comma and parenthesis with underscore
 feat$V4 <- gsub("__", "_", feat$V3) #replace double underscore with single underscore
 feat$V4 <- gsub("__", "_", feat$V4) #replace double underscore with single underscore
 feat$V4 <- gsub("_$", "", feat$V4) #remove _ from end of string
@@ -113,7 +113,7 @@ write.csv(accdata.sub, file = "./data/UCI HAR Dataset/subset.csv",
 #*     Label dataset with descriptive activity names
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #Task 3: Uses descriptive activity names to name the activities in the data set
-#   alredy done in above code [Task 1] while transfering names of variables
+#   already done in above code [Task 1] while transferring names of variables
 #   from features.
 
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -138,7 +138,7 @@ tidy <- ddply(accdata.sub[,c(-1)], c("Activity", "Subject"),
                 xmeans <- colMeans(xdf[,c(-1,-2)])
                 return(xmeans)
               })
-#write tidy dataset to a csv file with .txt extention
+#write tidy dataset to a csv file with .txt extension
 write.csv(tidy, file = "./data/UCI HAR Dataset/tidy.txt",
           row.names=FALSE)
 
