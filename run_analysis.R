@@ -143,7 +143,3 @@ write.csv(tidy, file = "./data/UCI HAR Dataset/tidy.txt",
           row.names=FALSE)
 
 ##### fin *****
-
-#rm(list = ls())
-#exporting variable names to a file
-varlist <- data.frame(names(tidy))
