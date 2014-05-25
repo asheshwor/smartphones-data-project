@@ -29,7 +29,7 @@
 #
 # **** Warning ****
 # Due to the large size of the dataset, the script takes a few minutes to
-# run (>5 minutes). Please be patient.
+# run (>6 minutes). Please be patient.
 # A buffersize of 500 is used to read the large data sets.
 # Please change it to a smaller value if less RAM is available.
 
@@ -81,6 +81,7 @@ feat <- feat[,c(4)] #make a vector
 ## read acceleration data
 widths <- rep(c(-1, 15),561) #561 columns in the text file
 ## use smaller buffer size if less than 8GB of RAM is available
+#   (it used ~4.6GB out of 8GB in my machine with burrersize set to 500)
 buffer <- 500 #used ~5.6GB ram
 test.x <- read.fwf("./data/UCI HAR Dataset/test/X_test.txt", widths, header = F, n=-1,
                    buffersize = buffer)
